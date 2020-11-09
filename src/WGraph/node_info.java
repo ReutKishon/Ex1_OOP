@@ -1,4 +1,4 @@
-//package ex1;
+package WGraph;//package ex1;
 
 public interface node_info {
     /**

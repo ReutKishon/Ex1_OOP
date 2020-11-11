@@ -1,9 +1,11 @@
 package WGraph;
 
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 
-public class WGraph_DS implements weighted_graph {
+public class WGraph_DS implements weighted_graph, Serializable {
     private int edgesSize;
     int modifyCount;
     HashMap<Integer, node_info> nodes;
@@ -141,6 +143,7 @@ public class WGraph_DS implements weighted_graph {
         private String info;
         private double tag;
 
+
         public Node(int key) {
             this.key = key;
         }
@@ -173,11 +176,12 @@ public class WGraph_DS implements weighted_graph {
 
     }
 
-    public static class Edge {
+    public static class Edge implements Comparator<Edge> {
 
         private int src;
         private int dest;
         private double weight;
+        private int markNodeForALgo;
 
 
         public Edge(int src, int dest, double weight) {
@@ -208,6 +212,26 @@ public class WGraph_DS implements weighted_graph {
 
         public void setWeight(double weight) {
             this.weight = weight;
+        }
+
+        public void setMarkNodeForALgo(int node) {
+            this.markNodeForALgo = node;
+        }
+
+        public int getMarkNodeForALgo() {
+            return markNodeForALgo;
+        }
+
+        @Override
+        public int compare(Edge e1, Edge e2) {
+            if (e1.weight < e2.weight) {
+                return -1;
+            }
+            if (e1.weight > e2.weight) {
+                return 1;
+            }
+
+            return 0;
         }
     }
 

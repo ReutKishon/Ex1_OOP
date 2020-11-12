@@ -72,37 +72,43 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
     @Override
     public double shortestPathDist(int src, int dest) {
-        PriorityQueue<Pair<Integer,Double>> priorityQueue = new PriorityQueue<>();
         HashMap<Integer, Double> distances = new HashMap<>();
+        HashMap<Integer, Integer> parents = new HashMap<>();
+        Dijkstra(src, dest, distances, parents);
+
+        return distances.get(dest);
+    }
+
+
+    public void Dijkstra(int src, int dest, HashMap<Integer, Double> distances, HashMap<Integer, Integer> parents) {
+        PriorityQueue<Pair<Integer, Double>> priorityQueue = new PriorityQueue<>(Comparator.comparing(Pair::second));
         HashSet<Integer> visited = new HashSet<>();
 
         // Add source node to the priority queue
-        priorityQueue.add(new Pair<>(src,0.0));
+        priorityQueue.add(new Pair<>(src, 0.0));
 
         // Distance to the source is 0
-        distances.put(src,0.0);
-
+        distances.put(src, 0.0);
+        parents.put(src, -1);
 
 
         while (visited.size() != graph.nodeSize()) {
 
             // remove the minimum distance node
             // from the priority queue
-            int u = priorityQueue.remove().getKey();
+            int u = priorityQueue.remove().first();
 
             // adding the node whose distance is
             // finalized
             visited.add(u);
 
-            e_Neighbours(u,distances,visited,priorityQueue);
+            e_Neighbours(u, distances, visited, priorityQueue, parents);
         }
-        return distances.get(dest);
     }
-
 
     // Function to process all the neighbours
     // of the passed node
-    private void e_Neighbours(int u, HashMap<Integer, Double> dist, HashSet<Integer> visited, PriorityQueue<node_info> pq) {
+    private void e_Neighbours(int u, HashMap<Integer, Double> dist, HashSet<Integer> visited, PriorityQueue<Pair<Integer, Double>> pq, HashMap<Integer, Integer> parents) {
 
 
         // All the neighbors of v
@@ -114,11 +120,14 @@ public class WGraph_Algo implements weighted_graph_algorithms {
                 double newDistance = dist.get(u) + edgeDistance;
 
                 // If new distance is cheaper in cost
-                if (!dist.containsKey(neighbor.getKey()) || newDistance < dist.get(neighbor.getKey()))
+                if (!dist.containsKey(neighbor.getKey()) || newDistance < dist.get(neighbor.getKey())) {
                     dist.put(neighbor.getKey(), newDistance);
+                    parents.put(neighbor.getKey(), u);
+
+                }
 
                 // Add the current node to the queue
-                pq.add(neighbor);
+                pq.add(new Pair<>(neighbor.getKey(), dist.get(neighbor.getKey())));
             }
         }
     }
@@ -126,7 +135,23 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
     @Override
     public List<node_info> shortestPath(int src, int dest) {
-        return null;
+        if (graph == null) return null;
+
+        HashMap<Integer, Double> distances = new HashMap<>();
+        HashMap<Integer, Integer> parents = new HashMap<>();
+        Dijkstra(src, dest, distances, parents);
+        if (!distances.containsKey(dest)) return null;
+
+        List<node_info> path = new LinkedList<>();
+        int tail = dest;
+        path.add(graph.getNode(tail));
+        while (parents.get(tail)!=-1) {
+            path.add(graph.getNode(parents.get(tail)));
+            tail = parents.get(tail);
+        }
+        Collections.reverse(path);
+        return path;
+
     }
 
     @Override

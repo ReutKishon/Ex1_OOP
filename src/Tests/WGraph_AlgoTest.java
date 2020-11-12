@@ -51,6 +51,7 @@ class WGraph_AlgoTest {
         g.addNode(5);
         g.addNode(6);
         g.addNode(7);
+        g.addNode(8);
 
         g.connect(0, 1, 4);
         g.connect(1, 2, 2);
@@ -63,8 +64,10 @@ class WGraph_AlgoTest {
 
         weighted_graph_algorithms wga = new WGraph_Algo();
         wga.init(g);
-        double dist1 = wga.shortestPathDist(7,3);
-        assertEquals(8.0,dist1);
+//        double dist1 = wga.shortestPathDist(7,3);
+//        assertEquals(8.0,dist1);
+        double dist4 = wga.shortestPathDist(8,4);
+        assertEquals(-1,dist4);
         List<node_info>  path = wga.shortestPath(7,3);
         for (int i = 0; i <path.size() ; i++) {
             System.out.print(path.get(i).getKey() + ",");

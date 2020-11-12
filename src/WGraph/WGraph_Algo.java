@@ -74,13 +74,15 @@ public class WGraph_Algo implements weighted_graph_algorithms {
     public double shortestPathDist(int src, int dest) {
         HashMap<Integer, Double> distances = new HashMap<>();
         HashMap<Integer, Integer> parents = new HashMap<>();
-        Dijkstra(src, dest, distances, parents);
-
-        return distances.get(dest);
+        Dijkstra(src, distances, parents);
+        if (distances.size() == 1 || !distances.containsKey(dest)) {
+            return -1;
+        }
+            return distances.get(dest);
     }
 
 
-    public void Dijkstra(int src, int dest, HashMap<Integer, Double> distances, HashMap<Integer, Integer> parents) {
+    public void Dijkstra(int src, HashMap<Integer, Double> distances, HashMap<Integer, Integer> parents) {
         PriorityQueue<Pair<Integer, Double>> priorityQueue = new PriorityQueue<>(Comparator.comparing(Pair::second));
         HashSet<Integer> visited = new HashSet<>();
 
@@ -92,7 +94,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         parents.put(src, -1);
 
 
-        while (visited.size() != graph.nodeSize()) {
+        while (visited.size() != graph.nodeSize() && !priorityQueue.isEmpty()) {
 
             // remove the minimum distance node
             // from the priority queue
@@ -139,13 +141,14 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
         HashMap<Integer, Double> distances = new HashMap<>();
         HashMap<Integer, Integer> parents = new HashMap<>();
-        Dijkstra(src, dest, distances, parents);
-        if (!distances.containsKey(dest)) return null;
-
+        Dijkstra(src, distances, parents);
+        if (distances.size()==1 || !distances.containsKey(dest)) {
+            return null;
+        }
         List<node_info> path = new LinkedList<>();
         int tail = dest;
         path.add(graph.getNode(tail));
-        while (parents.get(tail)!=-1) {
+        while (parents.get(tail) != -1) {
             path.add(graph.getNode(parents.get(tail)));
             tail = parents.get(tail);
         }

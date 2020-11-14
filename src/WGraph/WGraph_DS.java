@@ -1,11 +1,10 @@
 package WGraph;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 
-public class WGraph_DS implements weighted_graph, Serializable {
+public class WGraph_DS implements weighted_graph, java.io.Serializable {
     private int edgesSize;
     int modifyCount;
     HashMap<Integer, node_info> nodes;
@@ -138,7 +137,7 @@ public class WGraph_DS implements weighted_graph, Serializable {
     }
 
 
-    public static class Node implements node_info {
+    public static class Node implements node_info, java.io.Serializable {
         private final int key;
         private String info;
         private double tag;
@@ -146,6 +145,13 @@ public class WGraph_DS implements weighted_graph, Serializable {
 
         public Node(int key) {
             this.key = key;
+        }
+
+        // constructor for copy the graph
+        public Node(int key, double tag , String info) {
+            this.key = key;
+            this.tag = tag;
+            this.info = info;
         }
 
         @Override
@@ -176,12 +182,11 @@ public class WGraph_DS implements weighted_graph, Serializable {
 
     }
 
-    public static class Edge implements Comparator<Edge> {
+    public static class Edge implements Comparator<Edge> , java.io.Serializable {
 
         private int src;
         private int dest;
         private double weight;
-        private int markNodeForALgo;
 
 
         public Edge(int src, int dest, double weight) {
@@ -214,13 +219,6 @@ public class WGraph_DS implements weighted_graph, Serializable {
             this.weight = weight;
         }
 
-        public void setMarkNodeForALgo(int node) {
-            this.markNodeForALgo = node;
-        }
-
-        public int getMarkNodeForALgo() {
-            return markNodeForALgo;
-        }
 
         @Override
         public int compare(Edge e1, Edge e2) {

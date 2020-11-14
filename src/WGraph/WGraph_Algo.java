@@ -2,6 +2,9 @@ package WGraph;
 
 import org.testng.internal.collections.Pair;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.*;
 
 public class WGraph_Algo implements weighted_graph_algorithms {
@@ -20,7 +23,58 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
     @Override
     public weighted_graph copy() {
-        return null;
+        if (graph == null) {
+            return null;
+        }
+        weighted_graph copyGraph = new WGraph_DS();
+
+        Queue<node_info> q = new LinkedList<>();
+
+        Iterator<node_info> iterator = graph.getV().iterator();
+        if (!iterator.hasNext()) return copyGraph;
+        node_info src = iterator.next();
+        q.add(src);
+
+        copyGraph.addNode(src.getKey());
+        copyGraph.getNode(src.getKey()).setInfo(src.getInfo());
+        copyGraph.getNode(src.getKey()).setTag(src.getTag());
+
+        while (!q.isEmpty()) {
+            // Get the front node from the queue
+            // and then visit all its neighbours
+            node_info u = q.poll();
+
+
+            if (graph.getV(u.getKey()) != null) {
+                //for all neighbor of u:
+                for (node_info neighbor : graph.getV(u.getKey())) {
+
+
+                    // Check if this node has already been created
+                    if (copyGraph.getNode(neighbor.getKey()) == null) {
+                        q.add(neighbor);
+
+                        // If not then create a new Node and add it to the copyGraph
+
+                        copyGraph.addNode(neighbor.getKey());
+                        copyGraph.getNode(neighbor.getKey()).setTag(neighbor.getTag());
+                        copyGraph.getNode(neighbor.getKey()).setInfo(neighbor.getInfo());
+
+                    }
+
+                    // add the 'neighbor' to neighbour
+                    // vector of u
+                    if (!copyGraph.hasEdge(u.getKey(),neighbor.getKey())) {
+                        double weight = graph.getEdge(u.getKey(),neighbor.getKey());
+                        copyGraph.connect(u.getKey(), neighbor.getKey(),weight);
+                    }
+                }
+            }
+        }
+
+        // Return the copyGraph
+        return copyGraph;
+
     }
 
     @Override
@@ -78,7 +132,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         if (distances.size() == 1 || !distances.containsKey(dest)) {
             return -1;
         }
-            return distances.get(dest);
+        return distances.get(dest);
     }
 
 
@@ -142,7 +196,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         HashMap<Integer, Double> distances = new HashMap<>();
         HashMap<Integer, Integer> parents = new HashMap<>();
         Dijkstra(src, distances, parents);
-        if (distances.size()==1 || !distances.containsKey(dest)) {
+        if (distances.size() == 1 || !distances.containsKey(dest)) {
             return null;
         }
         List<node_info> path = new LinkedList<>();
@@ -159,7 +213,17 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
     @Override
     public boolean save(String file) {
-        return false;
+        System.out.println("start Serialize to" + file);
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(graph.getV());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        System.out.println("end of Serialize");
+        return true;
     }
 
     @Override

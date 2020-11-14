@@ -68,6 +68,8 @@ class WGraph_AlgoTest {
 //        assertEquals(8.0,dist1);
         double dist4 = wga.shortestPathDist(8,4);
         assertEquals(-1,dist4);
+        double distToMyself = wga.shortestPathDist(1,1);
+        assertEquals(0,distToMyself);
         List<node_info>  path = wga.shortestPath(7,3);
         for (int i = 0; i <path.size() ; i++) {
             System.out.print(path.get(i).getKey() + ",");

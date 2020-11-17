@@ -2,9 +2,7 @@ package WGraph;
 
 import org.testng.internal.collections.Pair;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.*;
 
 public class WGraph_Algo implements weighted_graph_algorithms {
@@ -50,7 +48,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
                 for (node_info neighbor : graph.getV(u.getKey())) {
 
 
-                    // Check if this node has already been created
+                    // Check if this node has not already been created
                     if (copyGraph.getNode(neighbor.getKey()) == null) {
                         q.add(neighbor);
 
@@ -64,9 +62,9 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
                     // add the 'neighbor' to neighbour
                     // vector of u
-                    if (!copyGraph.hasEdge(u.getKey(),neighbor.getKey())) {
-                        double weight = graph.getEdge(u.getKey(),neighbor.getKey());
-                        copyGraph.connect(u.getKey(), neighbor.getKey(),weight);
+                    if (!copyGraph.hasEdge(u.getKey(), neighbor.getKey())) {
+                        double weight = graph.getEdge(u.getKey(), neighbor.getKey());
+                        copyGraph.connect(u.getKey(), neighbor.getKey(), weight);
                     }
                 }
             }
@@ -216,8 +214,8 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         System.out.println("start Serialize to" + file);
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(graph.getV());
+            ObjectOutputStream o = new ObjectOutputStream(fileOutputStream);
+            o.writeObject(graph);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -228,6 +226,35 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
     @Override
     public boolean load(String file) {
+
+        try {
+            FileInputStream fi = new FileInputStream(file);
+            ObjectInputStream oi = new ObjectInputStream(fi);
+
+
+            // Read objects
+            weighted_graph gr = (weighted_graph) oi.readObject();
+
+            System.out.println(gr.toString());
+
+            oi.close();
+            fi.close();
+            graph = gr;
+            return true;
+
+        } catch (
+                FileNotFoundException e) {
+            System.out.println("File not found");
+        } catch (
+                IOException e) {
+            System.out.println("Error initializing stream");
+        } catch (
+                ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return false;
     }
+
 }
+

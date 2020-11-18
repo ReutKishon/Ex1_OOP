@@ -30,9 +30,10 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
         Iterator<node_info> iterator = graph.getV().iterator();
         if (!iterator.hasNext()) return copyGraph;
+        // get arbitrary node
         node_info src = iterator.next();
         q.add(src);
-
+// adding a copy of this node to the copyGraph
         copyGraph.addNode(src.getKey());
         copyGraph.getNode(src.getKey()).setInfo(src.getInfo());
         copyGraph.getNode(src.getKey()).setTag(src.getTag());
@@ -59,9 +60,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
                         copyGraph.getNode(neighbor.getKey()).setInfo(neighbor.getInfo());
 
                     }
-
-                    // add the 'neighbor' to neighbour
-                    // vector of u
+                    // add the 'neighbor' to neighbors of u
                     if (!copyGraph.hasEdge(u.getKey(), neighbor.getKey())) {
                         double weight = graph.getEdge(u.getKey(), neighbor.getKey());
                         copyGraph.connect(u.getKey(), neighbor.getKey(), weight);

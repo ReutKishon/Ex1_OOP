@@ -84,4 +84,36 @@ class WGraph_DSTest {
         assertEquals(1,g.edgeSize());
         assertEquals(7,g.getMC());
     }
+
+    @Test
+    void getNode() {
+    }
+
+    @Test
+    void getEdge() {
+    }
+
+    @Test
+    void getV() {
+    }
+
+    @Test
+    void testGetV() {
+    }
+
+    @Test
+    void nodeSize() {
+    }
+
+    @Test
+    void edgeSize() {
+    }
+
+    @Test
+    void getMC() {
+    }
+
+    @Test
+    void testEquals() {
+    }
 }

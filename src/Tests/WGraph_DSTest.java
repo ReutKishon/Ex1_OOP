@@ -44,11 +44,10 @@ class WGraph_DSTest {
         g.addNode(2);
         g.connect(1, 2, 4);
         g.connect(2, 0, 2);
-        assertEquals( 4,g.getEdge(1, 2));
+        assertTrue(g.hasEdge(1,2));
         assertEquals( 2,g.getEdge(0, 2));
-        g.connect(1,2,8);
-        assertEquals(8,g.getEdge(1,2));
-        assertEquals(-1,g.getEdge(1,0));
+        assertTrue(g.hasEdge(0,2));
+        assertFalse(g.hasEdge(1,0));
 
 
 
@@ -86,32 +85,27 @@ class WGraph_DSTest {
     }
 
     @Test
-    void getNode() {
-    }
-
-    @Test
     void getEdge() {
+
+        weighted_graph g = new WGraph_DS();
+        g.addNode(0);
+        g.addNode(1);
+        g.addNode(2);
+        g.addNode(3);
+        g.connect(1, 2, 4);
+        g.connect(3, 0, 7);
+
+        double res1= g.getEdge(1,2);
+        assertEquals(4,res1);
+        double res2= g.getEdge(3,0);
+        assertEquals(7,res2);
+        double res3 = g.getEdge(3,2);
+        assertEquals(-1,res3);
+
+
+
     }
 
-    @Test
-    void getV() {
-    }
-
-    @Test
-    void testGetV() {
-    }
-
-    @Test
-    void nodeSize() {
-    }
-
-    @Test
-    void edgeSize() {
-    }
-
-    @Test
-    void getMC() {
-    }
 
     @Test
     void testEquals() {

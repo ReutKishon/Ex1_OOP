@@ -11,8 +11,36 @@ class WGraph_AlgoTest {
     private static Random _rnd = null;
 
 
+
+
     @Test
-    void isConnected() {
+    void oneVerticesGraph() {
+        weighted_graph graph = new WGraph_DS();
+        graph.addNode(1);
+        weighted_graph_algorithms ga = new WGraph_Algo();
+        ga.init(graph);
+        assertEquals(-1, ga.shortestPathDist(1, 2));
+        assertNull(ga.shortestPath(1, 2));
+        double res = ga.shortestPathDist(1, 1);
+        assertEquals(0, res);
+
+    }
+
+
+    @Test
+    void nullGraph() {
+        weighted_graph_algorithms ga = new WGraph_Algo();
+
+        ga.init(null);
+        assertEquals(-1, ga.shortestPathDist(1, 3));
+        assertNull(ga.shortestPath(1, 3));
+        assertNull(ga.copy());
+        assertTrue(ga.isConnected()); // in an empty way
+
+    }
+
+    @Test
+    void isConnected1() {
         weighted_graph g0 = graph_creator(0, 0, 1);
         weighted_graph_algorithms ag0 = new WGraph_Algo();
         ag0.init(g0);
@@ -39,14 +67,151 @@ class WGraph_AlgoTest {
         assertTrue(b);
     }
 
+
     @Test
-    void shortestPathDist() {
+    void isConnected2() {
+
+        weighted_graph graph = new WGraph_DS();
+        int i = 0;
+        while (i < 10) {
+            graph.addNode(i);
+            i++;
+        }
+        graph.connect(0, 1, 4);
+        graph.connect(0, 8, 1);
+        graph.connect(1, 5, 10);
+        graph.connect(1, 7, 32);
+        graph.connect(2, 6, 7);
+        graph.connect(3, 7, 4.2);
+        graph.connect(3, 4, 6);
+        graph.connect(4, 9, 12);
+        graph.connect(5, 6, 41);
+        weighted_graph_algorithms ga = new WGraph_Algo();
+        ga.init(graph);
+        assertTrue(ga.isConnected());
+        graph.removeNode(9);
+        assertTrue(ga.isConnected());
+        graph.removeNode(7);
+        assertFalse(ga.isConnected());
+        graph.connect(3,5,1);
+        assertTrue(ga.isConnected());
+    }
+
+    @Test
+    void isConnected3() {
+        weighted_graph g = new WGraph_DS();
+
+        g.addNode(0);
+        g.addNode(1);
+        g.addNode(2);
+        g.addNode(3);
+        g.addNode(4);
+        g.connect(0, 1, 4);
+        g.connect(1, 2, 2);
+        g.connect(1, 3, 1);
+        g.connect(3, 4, 6);
+        weighted_graph_algorithms ga = new WGraph_Algo();
+        ga.init(g);
+        assertTrue(ga.isConnected());
+        g.removeEdge(4, 3);
+        assertFalse(ga.isConnected());
+        g.connect(4, 0, 2);
+        assertTrue(ga.isConnected());
+
+    }
+    @Test
+    void isConnected4(){
+
+
+        weighted_graph graph = graph_creator(100000,130000,1);
+        weighted_graph_algorithms ga = new WGraph_Algo();
+        ga.init(graph);
+        boolean res = ga.isConnected();
+        assertFalse(res);
+
+
+    }
+    @Test
+    void shortestPathDist1() {
         weighted_graph g0 = small_graph();
         weighted_graph_algorithms ag0 = new WGraph_Algo();
         ag0.init(g0);
         assertTrue(ag0.isConnected());
         double d = ag0.shortestPathDist(0, 10);
         assertEquals(d, 5.1);
+    }
+
+    @Test
+    void shortestPathDist2(){
+        weighted_graph graph = new WGraph_DS();
+        int i = 0;
+        while (i < 10) {
+            graph.addNode(i);
+            i++;
+        }
+        graph.connect(0, 1, 1);
+        graph.connect(0, 8, 1);
+        graph.connect(1, 5, 2);
+        graph.connect(1, 7, 32);
+        graph.connect(2, 6, 7);
+        graph.connect(3, 7, 8);
+        graph.connect(3, 4, 6);
+        graph.connect(4, 9, 12);
+        graph.connect(5, 6, 6.5);
+        graph.connect(5, 3, 9);
+        graph.connect(9, 8, 1.5);
+
+
+        weighted_graph_algorithms wga = new WGraph_Algo();
+        wga.init(graph);
+        double res1 = wga.shortestPathDist(9,1);
+        assertEquals(3.5,res1);
+        double res2 = wga.shortestPathDist(2,7);
+        assertEquals(30.5,res2);
+        double res3 = wga.shortestPathDist(4,1);
+        assertEquals(15.5,res3);
+
+    }
+
+
+    @Test
+    void shortestPathDist3() {
+        weighted_graph g = new WGraph_DS();
+        g.addNode(0);
+        g.addNode(1);
+        g.addNode(2);
+        g.addNode(3);
+        g.addNode(4);
+        g.addNode(5);
+        g.addNode(6);
+        g.addNode(7);
+        g.addNode(8);
+
+        g.connect(0, 1, 4);
+        g.connect(1, 2, 2);
+        g.connect(1, 3, 1);
+        g.connect(3, 4, 6);
+        g.connect(2, 7, 9);
+        g.connect(6, 7, 2);
+        g.connect(6, 5, 2);
+        g.connect(5, 3, 4);
+
+        weighted_graph_algorithms wga = new WGraph_Algo();
+        wga.init(g);
+//        double dist1 = wga.shortestPathDist(7,3);
+//        assertEquals(8.0,dist1);
+        double dist4 = wga.shortestPathDist(8, 4);
+        assertEquals(-1, dist4);
+        double distToMyself = wga.shortestPathDist(1, 1);
+        assertEquals(0, distToMyself);
+        List<node_info> path = wga.shortestPath(7, 3);
+        for (int i = 0; i < path.size(); i++) {
+            System.out.print(path.get(i).getKey() + ",");
+        }
+        double dist2 = wga.shortestPathDist(6, 1);
+        assertEquals(7, dist2);
+        double dist3 = wga.shortestPathDist(4, 6);
+        assertEquals(12, dist3);
     }
 
     @Test
@@ -59,11 +224,12 @@ class WGraph_AlgoTest {
         int[] checkKey = {0, 1, 5, 7, 10};
         int i = 0;
         for (node_info n : sp) {
-//            assertEquals(n.getTag(), checkTag[i]);
             assertEquals(n.getKey(), checkKey[i]);
             i++;
         }
     }
+
+
 
     @Test
     void save_load() {
@@ -165,116 +331,23 @@ class WGraph_AlgoTest {
 
     @Test
     void copy() {
-    }
 
-    @Test
-    void isConnected2() {
-        weighted_graph g = new WGraph_DS();
-
-        g.addNode(0);
-        g.addNode(1);
-        g.addNode(2);
-        g.addNode(3);
-        g.addNode(4);
-        g.connect(0, 1, 4);
-        g.connect(1, 2, 2);
-        g.connect(1, 3, 1);
-        g.connect(3, 4, 6);
-        weighted_graph_algorithms ga = new WGraph_Algo();
-        ga.init(g);
-        assertTrue(ga.isConnected());
-        g.removeEdge(4, 3);
-        assertFalse(ga.isConnected());
-        g.connect(4, 0, 2);
-        assertTrue(ga.isConnected());
-
-    }
-
-    @Test
-    void BFS_Algo() {
-    }
-
-    @Test
-    void shortestPathDist2() {
-        weighted_graph g = new WGraph_DS();
-        g.addNode(0);
-        g.addNode(1);
-        g.addNode(2);
-        g.addNode(3);
-        g.addNode(4);
-        g.addNode(5);
-        g.addNode(6);
-        g.addNode(7);
-        g.addNode(8);
-
-        g.connect(0, 1, 4);
-        g.connect(1, 2, 2);
-        g.connect(1, 3, 1);
-        g.connect(3, 4, 6);
-        g.connect(2, 7, 9);
-        g.connect(6, 7, 2);
-        g.connect(6, 5, 2);
-        g.connect(5, 3, 4);
-
-        weighted_graph_algorithms wga = new WGraph_Algo();
-        wga.init(g);
-//        double dist1 = wga.shortestPathDist(7,3);
-//        assertEquals(8.0,dist1);
-        double dist4 = wga.shortestPathDist(8, 4);
-        assertEquals(-1, dist4);
-        double distToMyself = wga.shortestPathDist(1, 1);
-        assertEquals(0, distToMyself);
-        List<node_info> path = wga.shortestPath(7, 3);
-        for (int i = 0; i < path.size(); i++) {
-            System.out.print(path.get(i).getKey() + ",");
-        }
-        double dist2 = wga.shortestPathDist(6, 1);
-        assertEquals(7, dist2);
-        double dist3 = wga.shortestPathDist(4, 6);
-        assertEquals(12, dist3);
-    }
-
-    @Test
-    void shortestPathDist1() {
-
-        weighted_graph graph = new WGraph_DS();
-        graph.addNode(0);
+        weighted_graph graph = graph_creator(10, 5, 1);
         weighted_graph_algorithms ga = new WGraph_Algo();
         ga.init(graph);
-
-
-    }
-
-    @Test
-    void oneVerticesGraph() {
-        weighted_graph graph = new WGraph_DS();
-        graph.addNode(1);
-        weighted_graph_algorithms ga = new WGraph_Algo();
-        ga.init(graph);
-        assertEquals(-1,ga.shortestPathDist(1,2));
-        assertNull(ga.shortestPath(1, 2));
-        double res = ga.shortestPathDist(1, 1);
-        assertEquals(0, res);
+        weighted_graph copyGraph = ga.copy();
+        assertEquals(graph.edgeSize(), copyGraph.edgeSize());
+        assertEquals(graph.nodeSize(), copyGraph.nodeSize());
 
     }
 
-    @Test
-    void nullGraph() {
-        weighted_graph_algorithms ga = new WGraph_Algo();
 
-        ga.init(null);
-        assertEquals(-1, ga.shortestPathDist(1, 3));
-        assertNull(ga.shortestPath(1, 3));
-        assertNull(ga.copy());
-        assertTrue(ga.isConnected()); // in an empty way
 
-    }
-
-    @Test
-    void save2() {
-    }
-
-    @Test
-    void load2() {
-    }
+//    @Test
+//    void save2() {
+//    }
+//
+//    @Test
+//    void load2() {
+//    }
 }

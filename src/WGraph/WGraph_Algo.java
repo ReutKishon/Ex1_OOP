@@ -26,53 +26,35 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         }
         weighted_graph copyGraph = new WGraph_DS();
 
-        Queue<node_info> q = new LinkedList<>();
+        for (node_info n : graph.getV()) {
+            //copy the node if it's not created
+            if (copyGraph.getNode(n.getKey()) == null) {
+                copyGraph.addNode(n.getKey());
+                copyGraph.getNode(n.getKey()).setTag(n.getTag());
+                copyGraph.getNode(n.getKey()).setInfo(n.getInfo());
+            }
 
-        Iterator<node_info> iterator = graph.getV().iterator();
-        if (!iterator.hasNext()) return copyGraph;
-        // get arbitrary node
-        node_info src = iterator.next();
-        q.add(src);
-// adding a copy of this node to the copyGraph
-        copyGraph.addNode(src.getKey());
-        copyGraph.getNode(src.getKey()).setInfo(src.getInfo());
-        copyGraph.getNode(src.getKey()).setTag(src.getTag());
-
-        while (!q.isEmpty()) {
-            // Get the front node from the queue
-            // and then visit all its neighbours
-            node_info u = q.poll();
-
-
-            if (graph.getV(u.getKey()) != null) {
-                //for all neighbor of u:
-                for (node_info neighbor : graph.getV(u.getKey())) {
-
-
-                    // Check if this node has not already been created
-                    if (copyGraph.getNode(neighbor.getKey()) == null) {
-                        q.add(neighbor);
-
-                        // If not then create a new Node and add it to the copyGraph
-
-                        copyGraph.addNode(neighbor.getKey());
-                        copyGraph.getNode(neighbor.getKey()).setTag(neighbor.getTag());
-                        copyGraph.getNode(neighbor.getKey()).setInfo(neighbor.getInfo());
-
-                    }
-                    // add the 'neighbor' to neighbors of u
-                    if (!copyGraph.hasEdge(u.getKey(), neighbor.getKey())) {
-                        double weight = graph.getEdge(u.getKey(), neighbor.getKey());
-                        copyGraph.connect(u.getKey(), neighbor.getKey(), weight);
-                    }
+            for (node_info neighbor : graph.getV(n.getKey())) {
+                //copy neighbor
+                if (copyGraph.getNode(neighbor.getKey()) == null) {
+                    copyGraph.addNode(neighbor.getKey());
+                    copyGraph.getNode(neighbor.getKey()).setTag(neighbor.getTag());
+                    copyGraph.getNode(neighbor.getKey()).setInfo(neighbor.getInfo());
+                }
+                //copy edge
+                if (!copyGraph.hasEdge(n.getKey(), neighbor.getKey())) {
+                    double weight = graph.getEdge(n.getKey(), neighbor.getKey());
+                    copyGraph.connect(n.getKey(), neighbor.getKey(), weight);
                 }
             }
-        }
 
-        // Return the copyGraph
+
+        }
         return copyGraph;
 
     }
+
+
 
     @Override
     public boolean isConnected() {
@@ -91,7 +73,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         return visited.size() == graph.nodeSize();
     }
 
- // helper method to isConnected
+    // helper method to isConnected
     public void BFS_Algo(int node, HashMap<Integer, Boolean> visited) {
 
 
@@ -202,7 +184,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
         HashMap<Integer, Double> distances = new HashMap<>();
         HashMap<Integer, Integer> parents = new HashMap<>();
-        Dijkstra(src, distances, parents , settled);
+        Dijkstra(src, distances, parents, settled);
         if (distances.size() == 1 || !distances.containsKey(dest)) {
             return null;
         }

@@ -150,49 +150,31 @@ public class WGraph_DS implements weighted_graph, java.io.Serializable {
         if (getClass() != obj.getClass())
             return false;
         weighted_graph anotherGraph = (weighted_graph) obj;
-        //
-        if (this.nodeSize() != anotherGraph.nodeSize() || this.edgesSize != anotherGraph.edgeSize() || this.modifyCount != anotherGraph.getMC()) {
+
+        if (this.nodeSize() != anotherGraph.nodeSize() || this.edgesSize != anotherGraph.edgeSize()) {
             return false;
         }
 
+        for (node_info n : this.getV()) {
 
-        Queue<node_info> q = new LinkedList<>();
+            // if anotherGraph does not contain n
+            if (anotherGraph.getNode(n.getKey()) == null) {
+                return false;
+            }
 
-        Iterator<node_info> iterator = anotherGraph.getV().iterator();
-        if (!iterator.hasNext()) return true;
-        node_info src = iterator.next();
+            for (node_info neighbor : this.getV(n.getKey())) {
 
-        q.add(src);
-        src.setTag(1);
+                if (anotherGraph.getNode(neighbor.getKey()) == null) return false;
 
-        while (!q.isEmpty()) {
-            // Get the front node from the queue
-            // and then visit all its neighbours
-            node_info u = q.poll();
-
-            //check the existence of the nodes of the anotherGraph in this graph
-            if (!this.nodes.containsKey(u.getKey())) return false;
-            // if u has neighbors
-            if (anotherGraph.getV(u.getKey()) != null) {
-                //for all neighbor of u:
-                for (node_info neighbor : anotherGraph.getV(u.getKey())) {
-
-                    // if neighbor is not visited
-                    if (neighbor.getTag() != 1) {
-                        //
-                        if (!nodes.containsKey(neighbor.getKey()) || !edges.get(u.getKey()).containsKey(getNode(neighbor.getKey()))) {
-                            return false;
-                        }
-                        q.add(neighbor);
-                        neighbor.setTag(1);
-
-
-                    }
-
-
+                //if anotherGraph does not contain the edge {n,neighbor}
+                if (!anotherGraph.hasEdge(n.getKey(), neighbor.getKey())) {
+                    return false;
                 }
             }
+
+
         }
+
         return true;
     }
 
@@ -202,7 +184,6 @@ public class WGraph_DS implements weighted_graph, java.io.Serializable {
         private String info;
         private double tag;
         public static int count = 0;
-
 
 
         public Node(int key) {

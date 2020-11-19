@@ -91,7 +91,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
         return visited.size() == graph.nodeSize();
     }
 
-
+ // helper method to isConnected
     public void BFS_Algo(int node, HashMap<Integer, Boolean> visited) {
 
 
@@ -123,29 +123,35 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
     @Override
     public double shortestPathDist(int src, int dest) {
+        int settled = ++WGraph_DS.Node.count;
+        if (graph == null) return -1;
         HashMap<Integer, Double> distances = new HashMap<>();
         HashMap<Integer, Integer> parents = new HashMap<>();
-        Dijkstra(src, distances, parents);
-        if (distances.size() == 1 || !distances.containsKey(dest)) {
+        // start dijkstra
+        Dijkstra(src, distances, parents, settled);
+// there is no path between src to dest
+        if (!distances.containsKey(dest)) {
             return -1;
         }
+
         return distances.get(dest);
     }
 
 
-    public void Dijkstra(int src, HashMap<Integer, Double> distances, HashMap<Integer, Integer> parents) {
+    public void Dijkstra(int src, HashMap<Integer, Double> distances, HashMap<Integer, Integer> parents, int settled) {
         PriorityQueue<Pair<Integer, Double>> priorityQueue = new PriorityQueue<>(Comparator.comparing(Pair::second));
-        HashSet<Integer> visited = new HashSet<>();
+//        HashSet<Integer> settled = new HashSet<>();
 
-        // Add source node to the priority queue
+        // Add source node to the priority queue. A distance from src to itself is zero.
         priorityQueue.add(new Pair<>(src, 0.0));
 
         // Distance to the source is 0
         distances.put(src, 0.0);
+        // checking for all the possible shortest path to every node from src , hench src does not have parent.
         parents.put(src, -1);
 
-
-        while (visited.size() != graph.nodeSize() && !priorityQueue.isEmpty()) {
+        int i = 0;
+        while (i != graph.nodeSize() && !priorityQueue.isEmpty()) {
 
             // remove the minimum distance node
             // from the priority queue
@@ -153,28 +159,31 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
             // adding the node whose distance is
             // finalized
-            visited.add(u);
+//            settled.add(u);
+            graph.getNode(u).setTag(settled);
+            i++;
 
-            e_Neighbours(u, distances, visited, priorityQueue, parents);
+            NeighboursProcess(u, distances, settled, priorityQueue, parents);
         }
     }
 
     // Function to process all the neighbours
     // of the passed node
-    private void e_Neighbours(int u, HashMap<Integer, Double> dist, HashSet<Integer> visited, PriorityQueue<Pair<Integer, Double>> pq, HashMap<Integer, Integer> parents) {
+    private void NeighboursProcess(int u, HashMap<Integer, Double> dist, int settled, PriorityQueue<Pair<Integer, Double>> pq, HashMap<Integer, Integer> parents) {
 
 
         // All the neighbors of v
         for (node_info neighbor : graph.getV(u)) {
 
             // If current node hasn't already been processed
-            if (!visited.contains(neighbor.getKey())) {
+            if (neighbor.getTag() != settled) {
                 double edgeDistance = graph.getEdge(u, neighbor.getKey());
                 double newDistance = dist.get(u) + edgeDistance;
 
                 // If new distance is cheaper in cost
                 if (!dist.containsKey(neighbor.getKey()) || newDistance < dist.get(neighbor.getKey())) {
                     dist.put(neighbor.getKey(), newDistance);
+                    //updating the parent of neighbor to u in order to restore the path later
                     parents.put(neighbor.getKey(), u);
 
                 }
@@ -188,11 +197,12 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
     @Override
     public List<node_info> shortestPath(int src, int dest) {
+        int settled = ++WGraph_DS.Node.count;
         if (graph == null) return null;
 
         HashMap<Integer, Double> distances = new HashMap<>();
         HashMap<Integer, Integer> parents = new HashMap<>();
-        Dijkstra(src, distances, parents);
+        Dijkstra(src, distances, parents , settled);
         if (distances.size() == 1 || !distances.containsKey(dest)) {
             return null;
         }

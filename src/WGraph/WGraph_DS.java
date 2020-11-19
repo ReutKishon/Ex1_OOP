@@ -3,10 +3,10 @@ package WGraph;
 import java.util.*;
 
 public class WGraph_DS implements weighted_graph, java.io.Serializable {
-    private int edgesSize;
-    int modifyCount;
     HashMap<Integer, node_info> nodes;
     HashMap<Integer, HashMap<node_info, Double>> edges;
+    private int edgesSize;
+    int modifyCount;
 
     public WGraph_DS() {
         edgesSize = 0;
@@ -35,7 +35,7 @@ public class WGraph_DS implements weighted_graph, java.io.Serializable {
 
     @Override
     public double getEdge(int node1, int node2) {
-       // if node1 and node2 are not neighbors.
+        // if node1 and node2 are not neighbors.
         if (!edges.get(node1).containsKey(getNode(node2))) return -1; // O(1)
 
         return edges.get(node1).get(getNode(node2)); //O(1)
@@ -57,10 +57,10 @@ public class WGraph_DS implements weighted_graph, java.io.Serializable {
 
     @Override
     public void connect(int node1, int node2, double w) {
-         //A node connected to itself is forbidden.
+        //A node connected to itself is forbidden.
         if (node1 == node2) return;
         // if node1 and node2 are not connected, then increase the edgesSize
-    if (!edges.get(node1).containsKey(getNode(node2))) { // O(1)
+        if (!edges.get(node1).containsKey(getNode(node2))) { // O(1)
             edgesSize++;
         }
 //      put new edge if there is no edge between node1 and node2 , else update the weight. O(1)
@@ -71,7 +71,8 @@ public class WGraph_DS implements weighted_graph, java.io.Serializable {
         modifyCount++;
 
     }
-//return pointer to the nodes collection O(1)
+
+    //return pointer to the nodes collection O(1)
     @Override
     public Collection<node_info> getV() {
         return nodes.values();
@@ -195,15 +196,18 @@ public class WGraph_DS implements weighted_graph, java.io.Serializable {
         return true;
     }
 
- // Node class
+    // Node class
     public static class Node implements node_info, java.io.Serializable {
         private final int key;
         private String info;
         private double tag;
+        public static int count = 0;
+
 
 
         public Node(int key) {
             this.key = key;
+            this.tag = count;
         }
 
         @Override

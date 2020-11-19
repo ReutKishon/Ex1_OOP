@@ -67,7 +67,7 @@ class WGraph_AlgoTest {
 
     @Test
     void save_load() {
-        weighted_graph g0 =graph_creator(10, 30, 1);
+        weighted_graph g0 = graph_creator(10, 30, 1);
         weighted_graph_algorithms ag0 = new WGraph_Algo();
         ag0.init(g0);
         String str = "g0.obj";
@@ -235,7 +235,38 @@ class WGraph_AlgoTest {
     }
 
     @Test
-    void shortestPath2() {
+    void shortestPathDist1() {
+
+        weighted_graph graph = new WGraph_DS();
+        graph.addNode(0);
+        weighted_graph_algorithms ga = new WGraph_Algo();
+        ga.init(graph);
+
+
+    }
+
+    @Test
+    void oneVerticesGraph() {
+        weighted_graph graph = new WGraph_DS();
+        graph.addNode(1);
+        weighted_graph_algorithms ga = new WGraph_Algo();
+        ga.init(graph);
+        assertEquals(-1,ga.shortestPathDist(1,2));
+        assertNull(ga.shortestPath(1, 2));
+        double res = ga.shortestPathDist(1, 1);
+        assertEquals(0, res);
+
+    }
+
+    @Test
+    void nullGraph() {
+        weighted_graph_algorithms ga = new WGraph_Algo();
+
+        ga.init(null);
+        assertEquals(-1, ga.shortestPathDist(1, 3));
+        assertNull(ga.shortestPath(1, 3));
+        assertNull(ga.copy());
+        assertTrue(ga.isConnected()); // in an empty way
 
     }
 

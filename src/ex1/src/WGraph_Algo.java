@@ -70,7 +70,7 @@ public class WGraph_Algo implements weighted_graph_algorithms {
 
         //check if all the vertices are visited, if yes then graph is connected
 
-        return visited.size() == graph.nodeSize();
+        return visited.size() == graph.nodeSize(); // O(1)
     }
 
     // helper method to isConnected

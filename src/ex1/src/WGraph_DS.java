@@ -1,4 +1,4 @@
-package WGraph;
+package ex1.src;
 
 import java.util.*;
 
@@ -159,6 +159,7 @@ public class WGraph_DS implements weighted_graph, java.io.Serializable {
 
             // if anotherGraph does not contain n
             if (anotherGraph.getNode(n.getKey()) == null) {
+
                 return false;
             }
 

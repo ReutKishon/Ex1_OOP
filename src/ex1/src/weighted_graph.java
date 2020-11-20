@@ -1,4 +1,5 @@
-package WGraph;//package ex1;
+package ex1.src;//package ex1;
+
 import java.util.Collection;
 
 /**

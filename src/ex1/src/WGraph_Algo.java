@@ -1,4 +1,4 @@
-package WGraph;
+package ex1.src;
 
 import org.testng.internal.collections.Pair;
 
@@ -226,18 +226,14 @@ public class WGraph_Algo implements weighted_graph_algorithms {
             // Read objects
             weighted_graph gr = (weighted_graph) oi.readObject();
 
-            System.out.println(gr.toString());
-
             oi.close();
             fi.close();
             graph = gr;
             return true;
 
-        } catch (
-                FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             System.out.println("File not found");
-        } catch (
-                IOException e) {
+        } catch (IOException e) {
             System.out.println("Error initializing stream");
         } catch (
                 ClassNotFoundException e) {

@@ -1,16 +1,17 @@
-package Tests;
+package ex1.Tests;
 
-import WGraph.*;
 import org.junit.jupiter.api.Test;
+import ex1.src.*;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class WGraph_AlgoTest {
     private static Random _rnd = null;
-
-
 
 
     @Test
@@ -93,7 +94,7 @@ class WGraph_AlgoTest {
         assertTrue(ga.isConnected());
         graph.removeNode(7);
         assertFalse(ga.isConnected());
-        graph.connect(3,5,1);
+        graph.connect(3, 5, 1);
         assertTrue(ga.isConnected());
     }
 
@@ -119,11 +120,12 @@ class WGraph_AlgoTest {
         assertTrue(ga.isConnected());
 
     }
+
     @Test
-    void isConnected4(){
+    void isConnected4() {
 
 
-        weighted_graph graph = graph_creator(100000,130000,1);
+        weighted_graph graph = graph_creator(100000, 130000, 1);
         weighted_graph_algorithms ga = new WGraph_Algo();
         ga.init(graph);
         boolean res = ga.isConnected();
@@ -131,6 +133,7 @@ class WGraph_AlgoTest {
 
 
     }
+
     @Test
     void shortestPathDist1() {
         weighted_graph g0 = small_graph();
@@ -142,7 +145,7 @@ class WGraph_AlgoTest {
     }
 
     @Test
-    void shortestPathDist2(){
+    void shortestPathDist2() {
         weighted_graph graph = new WGraph_DS();
         int i = 0;
         while (i < 10) {
@@ -164,12 +167,12 @@ class WGraph_AlgoTest {
 
         weighted_graph_algorithms wga = new WGraph_Algo();
         wga.init(graph);
-        double res1 = wga.shortestPathDist(9,1);
-        assertEquals(3.5,res1);
-        double res2 = wga.shortestPathDist(2,7);
-        assertEquals(30.5,res2);
-        double res3 = wga.shortestPathDist(4,1);
-        assertEquals(15.5,res3);
+        double res1 = wga.shortestPathDist(9, 1);
+        assertEquals(3.5, res1);
+        double res2 = wga.shortestPathDist(2, 7);
+        assertEquals(30.5, res2);
+        double res3 = wga.shortestPathDist(4, 1);
+        assertEquals(15.5, res3);
 
     }
 
@@ -230,7 +233,6 @@ class WGraph_AlgoTest {
     }
 
 
-
     @Test
     void save_load() {
         weighted_graph g0 = graph_creator(10, 30, 1);
@@ -238,11 +240,12 @@ class WGraph_AlgoTest {
         ag0.init(g0);
         String str = "g0.obj";
         ag0.save(str);
-        weighted_graph g1 = graph_creator(10, 30, 1);
-        ag0.load(str);
-        assertEquals(g0, g1);
+        weighted_graph_algorithms ag1 = new WGraph_Algo();
+
+        ag1.load(str);
+        assertEquals(g0, ag1.getGraph());
         g0.removeNode(0);
-        assertNotEquals(g0, g1);
+        assertNotEquals(g0, ag1.getGraph());
     }
 
     private weighted_graph small_graph() {
@@ -341,13 +344,14 @@ class WGraph_AlgoTest {
 
     }
 
+    @Test
+    void largeGraph(){
+        weighted_graph graph = graph_creator(1000000,2000000,1);
+        weighted_graph_algorithms wga = new WGraph_Algo();
+        wga.init(graph);
+        wga.shortestPathDist(0,1000);
+
+    }
 
 
-//    @Test
-//    void save2() {
-//    }
-//
-//    @Test
-//    void load2() {
-//    }
 }

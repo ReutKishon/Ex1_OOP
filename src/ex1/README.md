@@ -2,6 +2,7 @@ this project is about a weighted undirected graph.
 
 #weighted graph definition:
  A graph having a weight, or number, associated with each edge. in this project we require all weights to be nonnegative.
+ 
 #undirected graph definition: 
 An undirected graph is graph, i.e., a set of objects (called vertices or nodes) that are connected together, where all the edges are bidirectional.
 

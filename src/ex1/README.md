@@ -14,6 +14,7 @@ the neighbors are represented as hashmap. the key is the neighbor node, and the 
 #Algorithms:
 I used a static variable called count that that marks that specific node was visited or settled that will be updated every time we run an algorithm.
 the idea behind it is to avoid resetting all the nodes' tags that takes O(n) time.
+
 ##copy - 
 make a deep copy of the graph. traverse over the nodes and create a new node to the copyGraph with the same key,tag and info.
 In addition, traverse over the neighbors  of all the nodes (all the edges) and connect the corresponding nodes in the copyGraph.

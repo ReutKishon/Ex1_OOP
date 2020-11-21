@@ -1,7 +1,8 @@
-package ex1.Tests;
+package tests;
 
 import org.junit.jupiter.api.Test;
 import ex1.src.*;
+import src.*;
 
 import java.util.Arrays;
 import java.util.Collection;

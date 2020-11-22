@@ -1,3 +1,5 @@
+package ex1.tests;
+
 import WGraph_DS;
 import weighted_graph;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package src;
+package ex1.src;
 
 import org.testng.internal.collections.Pair;
 

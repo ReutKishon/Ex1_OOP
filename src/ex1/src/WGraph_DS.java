@@ -1,6 +1,7 @@
-package src;
+package ex1.src;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
 
 public class WGraph_DS implements weighted_graph, java.io.Serializable {
     HashMap<Integer, node_info> nodes;

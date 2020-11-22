@@ -1,7 +1,7 @@
-package tests;
+package ex1.tests;
 
 import src.WGraph_DS;
-import src.weighted_graph;
+import ex1.src.weighted_graph;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

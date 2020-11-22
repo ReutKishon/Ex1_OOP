@@ -30,7 +30,7 @@ public class Structure {
             if (!src.exists()) {
                 ans = false;
                 String str = "ERR: no folder named " + _dirs[i];
-                if (_dirs[i].equals("README.txt"))
+                if (_dirs[i].equals("README.md"))
                     str = "ERR: no file named " + _dirs[i];
                 System.err.println(str);
                 log(str);
